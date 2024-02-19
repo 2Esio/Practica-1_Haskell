@@ -1,5 +1,8 @@
 -- Practica 1
 
+import System.Random
+import Data.Char
+
 --Ejercicios:
 
 {-
@@ -122,4 +125,60 @@ resolverEcuacionCuadratica a b c
   where
     discriminante = b^2 - 4 * a * c
 
-    
+
+{-
+Ejerció extra:
+¿Recuerdas el juego de piedra, papel o tijera?
+Elabora un script que juegue contra el usuario y devuelva alguno de los tres estados: 
+gana usuario, pierde usuario o empate.
+Explica su método de uso desde la compilación y/o ejecución y tu estrategia de implementación.
+-}
+
+-- Definición de datos para representar las opciones del juego
+data Jugada = Piedra | Papel | Tijera deriving (Show, Eq)
+
+-- Función principal del juego
+jugarPiedraPapelTijera :: IO ()
+jugarPiedraPapelTijera = do
+  putStrLn "¡Bienvenido a Piedra, Papel o Tijera!"
+  putStrLn "Ingresa tu elección (piedra, papel, tijera):"
+  inputUsuario <- getLine
+
+  let eleccionUsuario = parsearJugada inputUsuario
+  case eleccionUsuario of
+    Just jugadaUsuario -> do
+      jugadaMaquina <- generarJugadaAleatoria
+      putStrLn $ "La máquina elige: " ++ show jugadaMaquina
+
+      let resultado = determinarGanador jugadaUsuario jugadaMaquina
+      putStrLn $ "Resultado: " ++ resultado
+    Nothing -> putStrLn "Elección no válida. Ingresa piedra, papel o tijera."
+
+-- Función para generar una jugada aleatoria para la máquina
+generarJugadaAleatoria :: IO Jugada
+generarJugadaAleatoria = do
+  indice <- randomRIO (0 :: Int, 2 :: Int)
+  return $ case indice of
+    0 -> Piedra
+    1 -> Papel
+    2 -> Tijera
+
+-- Función para determinar el ganador
+determinarGanador :: Jugada -> Jugada -> String
+determinarGanador usuario maquina
+  | usuario == maquina = "¡Empate!"
+  | (usuario == Piedra && maquina == Tijera) ||
+    (usuario == Papel && maquina == Piedra) ||
+    (usuario == Tijera && maquina == Papel) = "¡Ganas!"
+  | otherwise = "¡Pierdes!"
+
+-- Función para parsear la entrada del usuario a una Jugada
+parsearJugada :: String -> Maybe Jugada
+parsearJugada "piedra" = Just Piedra
+parsearJugada "papel"  = Just Papel
+parsearJugada "tijera" = Just Tijera
+parsearJugada _        = Nothing
+
+
+-- Función principal que ejecuta el juego
+--jugarPiedraPapelTijera
