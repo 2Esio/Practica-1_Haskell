@@ -91,7 +91,8 @@ areaPoligono Pentagono lado apotema | lado <= 0 || apotema <= 0 = -1
 areaPoligono Hexagono lado apotema | lado <= 0 || apotema <= 0 = -1
                                   | otherwise = (3 * sqrt 3 * lado * apotema) / 2
 
-areaPoligono Heptagono _ _ = -1  -- No se puede calcular el área de un heptágono regular con solo la longitud del lado y la apotema.
+areaPoligono Heptagono lado apotema | lado <= 0 || apotema <= 0 = -1
+                                    | otherwise = (7 * lado * apotema) / 2 
 
 areaPoligono Octagono lado apotema | lado <= 0 || apotema <= 0 = -1
                                   | otherwise = (2 * (1 + sqrt 2) * lado * apotema)
@@ -179,6 +180,3 @@ parsearJugada "papel"  = Just Papel
 parsearJugada "tijera" = Just Tijera
 parsearJugada _        = Nothing
 
-
--- Función principal que ejecuta el juego
---jugarPiedraPapelTijera
